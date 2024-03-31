@@ -15,11 +15,25 @@ CarRepo carRepo;
 
 @Override
 public boolean postCar(CarDTO carDTO) {
+	try {
+		
 	Car car = new Car();
 	car.setName(carDTO.getName());
 	car.setBrand(carDTO.getBrand());
 	car.setColor(carDTO.getColor());
-	return false;
+	car.setPrice(carDTO.getPrice());
+	car.setYear(carDTO.getYear());
+	car.setType(carDTO.getType());
+	car.setDescription(carDTO.getDescription());
+	car.setTransmission(carDTO.getTransmission());;
+	car.setImage(carDTO.getImage().getBytes());
+	carRepo.save(car);
+	return true;
+	}catch(Exception e) {
+		
+		return false;
+	}
+	
 }
 
 
