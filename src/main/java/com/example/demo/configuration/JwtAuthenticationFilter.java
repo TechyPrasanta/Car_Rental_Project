@@ -32,12 +32,12 @@ JWTutils jwtUtils;
 UserService userService;
 	
 	
-	@Override
-	protected void doFilterInternal(@NonNull HttpServletRequest request, 
+@Override
+protected void doFilterInternal(@NonNull HttpServletRequest request, 
 			                        @NonNull HttpServletResponse response,
 			                        @NonNull FilterChain filterChain)
 			throws ServletException, IOException {
-         final String authHeader = request.getHeader("Authorization");
+        final String authHeader = request.getHeader("Authorization");
 		final String jwt;
 		final String UserEmail;
 		if(StringUtils.isEmpty(authHeader)|| !StringUtils.startsWithIgnoreCase(authHeader, "Bearer")) {
