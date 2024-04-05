@@ -56,23 +56,29 @@ public ResponseEntity<?> signupCustomer(@RequestBody SignupRequest signupRequest
 
 
 @PostMapping("/login")
-public AuthenticationResponse createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws BadCredentialsException, DisabledException, UsernameNotFoundException {
+public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
     try {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword()));
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword()));
     } catch (BadCredentialsException e) {
         throw new BadCredentialsException("Incorrect Username or password");
     }
+
     final UserDetails userDetails = userService.userDetailsService().loadUserByUsername(authenticationRequest.getEmail());
-    Optional<User> optionalUser = userRepo.findByEmail(userDetails.getUsername());
-    final String jwt = jwtUtils.generateToken(userDetails);
-    AuthenticationResponse authenticationResponse = new AuthenticationResponse();
+    Optional<User> optionalUser = userRepo.findByEmail(authenticationRequest.getEmail());
+    
     if (optionalUser.isPresent()) {
+        final String jwt = jwtUtils.generateToken(userDetails);
+        AuthenticationResponse authenticationResponse = new AuthenticationResponse();
         authenticationResponse.setJwt(jwt);
         authenticationResponse.setUserId(optionalUser.get().getId());
         authenticationResponse.setUserRole(optionalUser.get().getUserRole());
+        return ResponseEntity.ok(authenticationResponse);
+    } else {
+        throw new UsernameNotFoundException("User not found with email: " + authenticationRequest.getEmail());
     }
-    return authenticationResponse;
+}
 }
 
 
-}
+

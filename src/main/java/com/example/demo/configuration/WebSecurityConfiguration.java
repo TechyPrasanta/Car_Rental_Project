@@ -22,42 +22,45 @@ import com.example.demo.service.UserService;
 import com.example.demo.service.UserServiceImpl;
 
 @Configuration
-@EnableWebSecurity
-@EnableMethodSecurity
 public class WebSecurityConfiguration {
 
-@Autowired
-UserServiceImpl userService;
+    @Autowired
+    UserService userService;
 
-@Autowired
-JwtAuthenticationFilter jwtAuthenticationFilter;
+    @Autowired
+    JwtAuthenticationFilter jwtAuthenticationFilter;
 
-@Bean
-public SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception{
-	http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(request ->
-	request.antMatchers("/api/auth/**").permitAll()
-	.antMatchers("/api/admin/**").hasAnyAuthority(UserRole.Admin.name())
-	.antMatchers("/api/customer/**").hasAnyAuthority(UserRole.Customer.name())
-	.anyRequest().authenticated()).sessionManagement(manager->
-	manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-	.authenticationProvider(authenticationProvider())
-	.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-	
-	return http.build();
-}
-@Bean
-public PasswordEncoder passwordEncoder() {
-	return new BCryptPasswordEncoder();
-}
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userService.userDetailsService());
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
 
-public AuthenticationProvider authenticationProvider() {
-	DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(); 
-	authProvider.setUserDetailsService(userService.userDetailsService());
-	authProvider.setPasswordEncoder(passwordEncoder());
-	return authProvider;
-}
-@Bean
-public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception{
-	return config.getAuthenticationManager();
-}
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf().disable()
+                .authorizeRequests(request ->
+                        request.antMatchers("/api/auth/**").permitAll()
+                                .antMatchers("/api/admin/**").hasAnyAuthority(UserRole.Admin.name())
+                                .antMatchers("/api/customer/**").hasAnyAuthority(UserRole.Customer.name())
+                                .anyRequest().authenticated())
+                .sessionManagement(manager ->
+                        manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
 }

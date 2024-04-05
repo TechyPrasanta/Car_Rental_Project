@@ -46,7 +46,7 @@ protected void doFilterInternal(@NonNull HttpServletRequest request,
 		}
 	jwt = authHeader.substring(7);
 		
-	UserEmail = jwtUtils.extractUserName(jwt);	
+	UserEmail = jwtUtils.extractUsername(jwt);	
 	if(StringUtils.isEmpty(UserEmail)
 			&& SecurityContextHolder.getContext().getAuthentication()== null) {
 	UserDetails userDetails = userService.userDetailsService().loadUserByUsername(UserEmail);
