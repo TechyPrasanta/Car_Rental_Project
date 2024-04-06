@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.example.demo.dto.CarDTO;
+
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,5 +36,19 @@ public class Car {
 	private Date year;
 	@Column(columnDefinition = "longblob")
 	private byte[]image;
+	
+	public CarDTO getCarDto() {
+		CarDTO carDto = new CarDTO();
+		carDto.setName(name);
+		carDto.setBrand(brand);
+		carDto.setColor(color);
+		carDto.setPrice(price);
+		carDto.setDescription(description);
+		carDto.setType(type);
+		carDto.setTransmission(transmission);
+		carDto.setYear(year);
+		carDto.setReturnedimage(image);
+		return carDto;
+	}
 
 }
