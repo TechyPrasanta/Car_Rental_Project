@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 public class CarDTO {
 
-	private Integer id;
+	private Long id;
 	private String brand;
 	private String color;
 	private String name;

@@ -6,9 +6,14 @@ import com.example.demo.dto.BookCarDTO;
 import com.example.demo.dto.CarDTO;
 
 public interface CustomerService {
+	
  List<CarDTO>getAllcars();
  
  boolean bookACar(BookCarDTO bookCarDTO);
+ 
+ CarDTO getcarById(Long Id);
+ 
+ List<BookCarDTO>getBookByuserId(Long userId);
  
  
  

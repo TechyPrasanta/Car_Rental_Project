@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.example.demo.dto.BookCarDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -21,8 +22,8 @@ import lombok.Setter;
 
 @Entity
 @Data
-@Getter
-@Setter
+//@Getter
+//@Setter
 public class BookCar {
 
 @Id
@@ -47,6 +48,19 @@ private User user;
 @JsonIgnore
 private Car car;
 
-
+public BookCarDTO getBookcarDTO() {
+	BookCarDTO bookCarDto = new BookCarDTO();
+	bookCarDto.setId(id);
+	bookCarDto.setDays(days);
+	bookCarDto.setBookcarStatus(bookcarStatus);
+	bookCarDto.setPrice(price);
+	bookCarDto.setTodate(todate);
+	bookCarDto.setFromdate(fromdate);
+	bookCarDto.setEmail(user.getEmail());
+	bookCarDto.setUsername(user.getName());
+	bookCarDto.setUserId(user.getId() );
+	bookCarDto.setCarId(car.getId());
+	return bookCarDto;
+}
 
 }

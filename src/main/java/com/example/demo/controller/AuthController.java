@@ -47,7 +47,7 @@ JWTutils jwtUtils;
 UserRepo userRepo;
 
 
-@PostMapping("/signup")
+@PostMapping("/signup") // TO SIGN UP
 public ResponseEntity<?> signupCustomer(@RequestBody SignupRequest signupRequest){
 	if(authService.hascustomerwithemail(signupRequest.getEmail()))
 		return new ResponseEntity<>("Customer email already exists",HttpStatus.NOT_ACCEPTABLE);
@@ -57,7 +57,7 @@ public ResponseEntity<?> signupCustomer(@RequestBody SignupRequest signupRequest
 }
 
 
-@PostMapping("/login")
+@PostMapping("/login") // LOG IN
 public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
     try {
         authenticationManager.authenticate(

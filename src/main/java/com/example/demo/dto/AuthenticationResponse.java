@@ -9,5 +9,5 @@ public class AuthenticationResponse {
 
 	private String jwt;
 	private UserRole userRole;
-	private Integer userId;
+	private Long userId;
 }

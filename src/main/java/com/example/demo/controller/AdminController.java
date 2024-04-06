@@ -26,7 +26,7 @@ public class AdminController {
 @Autowired
 AdminService adminService;
 
-@PostMapping("/car")
+@PostMapping("/car") // ADD CAR BY ADMIN
 public ResponseEntity<?>postCar(@ModelAttribute CarDTO carDTO){
 	boolean succes = adminService.postCar(carDTO);
 	if(succes) {
@@ -36,24 +36,24 @@ public ResponseEntity<?>postCar(@ModelAttribute CarDTO carDTO){
 	    }	
   }
 
-@GetMapping("/cars")
+@GetMapping("/cars") // GET ALL CAR 
 public ResponseEntity<?>getAllCars(){
 	     return ResponseEntity.ok(adminService.getAllcars());
 }
 
-@DeleteMapping("/car{id}")
+@DeleteMapping("/car{id}")  // DELETE CAR BY ID
 public ResponseEntity<Void>deleteCar(@PathVariable Long id){
 	adminService.deletecar(id);
 	return ResponseEntity.ok(null);
  }
 
-@GetMapping("/car{id}")
+@GetMapping("/car{id}")   // VIEW VCAR BY ID
 public ResponseEntity<CarDTO>getCarById(@PathVariable Long id){
 	CarDTO carDto = adminService.getCarById(id);
 	return ResponseEntity.ok(carDto);
 }
 
-@PutMapping("/car/{id}") // Corrected path variable syntax
+@PutMapping("/car/{id}") // UPDATE CAR 
 public ResponseEntity<Void> updateCar(@PathVariable Long id, @ModelAttribute CarDTO carDto) {
     try {
         boolean success = adminService.updateCar(id, carDto);
